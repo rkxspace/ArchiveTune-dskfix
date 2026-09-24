@@ -249,6 +249,7 @@ enum class AiProvider {
     CHATGPT,
     GEMINI,
     OPENROUTER,
+    DEEPSEEK,
     CUSTOM,
     NONE,
 }

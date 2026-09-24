@@ -32,6 +32,8 @@ object AiTextService {
     private const val OpenRouterEndpoint = "https://openrouter.ai/api/v1/chat/completions"
     private const val OpenRouterModelsEndpoint = "https://openrouter.ai/api/v1/models"
     private const val GeminiBaseEndpoint = "https://generativelanguage.googleapis.com/v1beta"
+    private const val DeepSeekEndpoint = "https://api.deepseek.com/chat/completions"
+    private const val DeepSeekModelsEndpoint = "https://api.deepseek.com/models"
 
     private val client =
         HttpClient(OkHttp) {
@@ -154,6 +156,23 @@ object AiTextService {
                 )
             }
 
+            AiProvider.DEEPSEEK -> {
+                completeOpenAiCompatible(
+                    endpoint = DeepSeekEndpoint,
+                    apiKey = config.apiKey,
+                    model = model,
+                    systemPrompt = systemPrompt,
+                    userPrompt = userPrompt,
+                    temperature = temperature,
+                    maxTokens = maxTokens,
+                ) {
+                    put(
+                        "thinking",
+                        JSONObject().put("type", "disabled"),
+                    )
+                }
+            }
+
             AiProvider.NONE -> {
                 throw AiServiceException("AI provider is disabled")
             }
@@ -166,6 +185,7 @@ object AiTextService {
             AiProvider.CHATGPT -> fetchOpenAiModels(OpenAiModelsEndpoint, config.apiKey)
             AiProvider.OPENROUTER -> fetchOpenAiModels(OpenRouterModelsEndpoint, config.apiKey)
             AiProvider.GEMINI -> fetchGeminiModels(config.apiKey)
+            AiProvider.DEEPSEEK -> fetchOpenAiModels(DeepSeekModelsEndpoint, config.apiKey)
             AiProvider.CUSTOM, AiProvider.NONE -> emptyList()
         }
     }
@@ -178,6 +198,7 @@ object AiTextService {
         userPrompt: String,
         temperature: Double,
         maxTokens: Int,
+        bodyAdditions: JSONObject.() -> Unit = {},
     ): String {
         val messages =
             JSONArray()
@@ -189,6 +210,7 @@ object AiTextService {
                 .put("messages", messages)
                 .put("temperature", temperature)
                 .put("max_tokens", maxTokens)
+                .apply(bodyAdditions)
                 .toString()
         val response =
             client.post(endpoint.trim()) {
@@ -260,6 +282,7 @@ object AiTextService {
             AiProvider.CHATGPT -> "gpt-4o"
             AiProvider.GEMINI -> "gemini-3.5-flash"
             AiProvider.OPENROUTER -> "~openai/gpt-latest"
+            AiProvider.DEEPSEEK -> "deepseek-flash"
             AiProvider.CUSTOM -> throw AiServiceException("No AI model configured")
             AiProvider.NONE -> throw AiServiceException("AI provider is disabled")
         }

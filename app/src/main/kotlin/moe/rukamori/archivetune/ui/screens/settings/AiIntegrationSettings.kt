@@ -111,6 +111,7 @@ private val AiProviderOptions =
         AiProvider.GEMINI,
         AiProvider.CHATGPT,
         AiProvider.OPENROUTER,
+        AiProvider.DEEPSEEK,
         AiProvider.CUSTOM,
         AiProvider.NONE,
     )
@@ -554,6 +555,7 @@ private fun AiProvider.label(): String =
         AiProvider.CHATGPT -> stringResource(R.string.ai_provider_openai)
         AiProvider.GEMINI -> stringResource(R.string.ai_provider_gemini)
         AiProvider.OPENROUTER -> stringResource(R.string.ai_provider_openrouter)
+        AiProvider.DEEPSEEK -> stringResource(R.string.ai_provider_deepseek)
         AiProvider.CUSTOM -> stringResource(R.string.custom)
         AiProvider.NONE -> stringResource(R.string.ai_provider_none)
     }

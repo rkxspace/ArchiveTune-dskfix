@@ -672,6 +672,7 @@
     <string name="ai_provider_desc">Choose the AI service.</string>
     <string name="ai_provider_openai">OpenAI</string>
     <string name="ai_provider_gemini">Gemini</string>
+    <string name="ai_provider_deepseek">DeepSeek</string>
     <string name="ai_provider_none">None (Disabled)</string>
     <string name="ai_provider_openrouter">OpenRouter</string>
     <string name="ai_custom_endpoint">Custom endpoint</string>
