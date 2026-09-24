@@ -143,7 +143,7 @@ class RefreshLibraryTopMixesUseCase
                             .put("candidates", candidatePayload)
                             .toString(),
                     temperature = 0.35,
-                    maxTokens = 4096,
+                    maxTokens = 8192,
                 )
             return parseGeneratedMixes(
                 response = response,
